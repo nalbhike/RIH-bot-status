@@ -1,0 +1,11 @@
+{
+  "bot": "Prospect Research",
+  "slug": "prospect-research",
+  "department": "Research",
+  "owner": "Hike",
+  "status": "idle",
+  "room": "kitchen",
+  "task": "Awaiting next assignment",
+  "updated_at": "2026-10-30T21:32:28+02:00",
+  "last_output": "Prospect discovery briefs"
+}
