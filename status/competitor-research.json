@@ -3,9 +3,9 @@
   "slug": "competitor-research",
   "department": "Research",
   "owner": "Hike",
-  "status": "idle",
-  "room": "kitchen",
-  "task": "Awaiting first assignment",
-  "updated_at": "2026-10-30T15:35:43+02:00",
-  "last_output": null
+  "status": "working",
+  "room": "desk",
+  "task": "Extending competitor research: filling gaps, finding new competitors",
+  "updated_at": "2026-10-30T21:30:03+02:00",
+  "last_output": "Competitor baseline files"
 }
