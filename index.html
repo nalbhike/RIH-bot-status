@@ -261,7 +261,7 @@ button.live:hover{filter:brightness(.97)}
 "use strict";
 const REPO="nalbhike/RIH-bot-status",RAW="https://raw.githubusercontent.com/"+REPO+"/",HEAD_API="https://api.github.com/repos/"+REPO+"/commits/main";
 /* raw.githubusercontent ignores query strings and caches a branch path ~5 min, so we learn the newest commit SHA from the API
-   (unauthenticated: 60 req/h per IP, so at most once a minute, ETag-conditional) and read files at that SHA (fresh + immutable). */
+   (unauthenticated: 60 req/h per IP, so at most once a minute, fallback: branch URL) and read files at that SHA (fresh + immutable). */
 const REFRESH_MS=5000, HEAD_MS=60000, STALE_MS=24*3600e3;
 const DEPTS=[
  {id:"Research",c:"#0ea5e9",i:"search",head:"Insight for every decision"},
@@ -319,16 +319,16 @@ function normalize(r,st,miss){
  if(s!=="planned"&&(b.u==null||Date.now()-b.u>STALE_MS))s="stale";
  b.s=s;return b}
 
-let headSha=null,headEtag=null,headAt=0,headBlockUntil=0,RAWTXT={},lastBrief=0;
+let headSha=null,headAt=0,headBlockUntil=0,RAWTXT={},lastBrief=0;
 async function checkHead(force){
  const now=Date.now();if(now<headBlockUntil||(!force&&now-headAt<HEAD_MS)||(force&&now-headAt<15000))return;
  headAt=now;
- try{const r=await fetch(HEAD_API,{headers:headEtag?{"If-None-Match":headEtag,"Accept":"application/vnd.github+json"}:{"Accept":"application/vnd.github+json"},cache:"no-store"});
-  if(r.status===304)return;
+ try{/* plain GET, no custom headers (no CORS preflight), no browser revalidation */
+  const r=await fetch(HEAD_API+"?_="+now,{cache:"no-store"});
   if(r.status===403||r.status===429){const rs=+r.headers.get("x-ratelimit-reset");headBlockUntil=rs?rs*1000:now+15*60e3;return}
   if(!r.ok)return;
-  const j=await r.json();if(j&&/^[0-9a-f]{40}$/.test(j.sha)){headSha=j.sha;headEtag=r.headers.get("etag")}
- }catch(e){}}
+  const j=await r.json();if(j&&/^[0-9a-f]{40}$/.test(j.sha))headSha=j.sha;
+ }catch(e){headBlockUntil=now+120e3}}
 async function getJSON(path){
  /* pinned SHA URLs never change, so the browser cache can answer repeat polls; branch URLs bypass it */
  const ref=headSha||"main";
