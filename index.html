@@ -319,7 +319,7 @@ function normalize(r,st,miss){
  if(s!=="planned"&&(b.u==null||Date.now()-b.u>STALE_MS))s="stale";
  b.s=s;return b}
 
-let headSha=null,headAt=0,headBlockUntil=0,RAWTXT={},lastBrief=0;
+let headSha=null,lastBranch=0,headAt=0,headBlockUntil=0,RAWTXT={},lastBrief=0;
 async function checkHead(force){
  const now=Date.now();if(now<headBlockUntil||(!force&&now-headAt<HEAD_MS)||(force&&now-headAt<15000))return;
  headAt=now;
@@ -341,6 +341,9 @@ async function load(force){
  if(loading)return;loading=true;$("#retry").classList.add("spin");
  try{
   await checkHead(force);
+  /* without a SHA (API limit hit) branch URLs only change every ~5 min, so poll them once a minute to respect raw limits */
+  if(!headSha&&!force&&MODE==="live"&&Date.now()-lastBranch<HEAD_MS)return;
+  if(!headSha)lastBranch=Date.now();
   const ro=await getJSON("bots.json");
   if(!ro.data||!Array.isArray(ro.data.bots))throw new Error("bad roster");
   const roster=ro.data.bots.filter(r=>r&&r.slug&&/^[a-z0-9-]+$/.test(r.slug));
