@@ -3,9 +3,9 @@
   "slug": "tech-and-integrations-research",
   "department": "Research",
   "owner": "Hike",
-  "status": "working",
-  "room": "desk",
-  "task": "Relaying integrations feasibility summary",
-  "updated_at": "2026-10-30T21:29:56+02:00",
-  "last_output": null
+  "status": "idle",
+  "room": "kitchen",
+  "task": "Awaiting next assignment",
+  "updated_at": "2026-10-30T21:29:57+02:00",
+  "last_output": "Integrations feasibility notes"
 }
