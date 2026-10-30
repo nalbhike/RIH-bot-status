@@ -259,8 +259,10 @@ button.live:hover{filter:brightness(.97)}
 <div id="overlay"></div><aside class="drawer" id="drawer" aria-label="Bot details"></aside>
 <script>
 "use strict";
-const BASE="https://raw.githubusercontent.com/nalbhike/RIH-bot-status/main/";
-const REFRESH_MS=60000, STALE_MS=24*3600e3;
+const REPO="nalbhike/RIH-bot-status",RAW="https://raw.githubusercontent.com/"+REPO+"/",HEAD_API="https://api.github.com/repos/"+REPO+"/commits/main";
+/* raw.githubusercontent ignores query strings and caches a branch path ~5 min, so we learn the newest commit SHA from the API
+   (unauthenticated: 60 req/h per IP, so at most once a minute, ETag-conditional) and read files at that SHA (fresh + immutable). */
+const REFRESH_MS=5000, HEAD_MS=60000, STALE_MS=24*3600e3;
 const DEPTS=[
  {id:"Research",c:"#0ea5e9",i:"search",head:"Insight for every decision"},
  {id:"Knowledge",c:"#8b5cf6",i:"book",head:"Single source of truth"},
@@ -317,29 +319,49 @@ function normalize(r,st,miss){
  if(s!=="planned"&&(b.u==null||Date.now()-b.u>STALE_MS))s="stale";
  b.s=s;return b}
 
+let headSha=null,headEtag=null,headAt=0,headBlockUntil=0,RAWTXT={},lastBrief=0;
+async function checkHead(force){
+ const now=Date.now();if(now<headBlockUntil||(!force&&now-headAt<HEAD_MS)||(force&&now-headAt<15000))return;
+ headAt=now;
+ try{const r=await fetch(HEAD_API,{headers:headEtag?{"If-None-Match":headEtag,"Accept":"application/vnd.github+json"}:{"Accept":"application/vnd.github+json"},cache:"no-store"});
+  if(r.status===304)return;
+  if(r.status===403||r.status===429){const rs=+r.headers.get("x-ratelimit-reset");headBlockUntil=rs?rs*1000:now+15*60e3;return}
+  if(!r.ok)return;
+  const j=await r.json();if(j&&/^[0-9a-f]{40}$/.test(j.sha)){headSha=j.sha;headEtag=r.headers.get("etag")}
+ }catch(e){}}
 async function getJSON(path){
- const r=await fetch(BASE+path+"?t="+Math.floor(Date.now()/60000),{cache:"no-store"});
+ /* pinned SHA URLs never change, so the browser cache can answer repeat polls; branch URLs bypass it */
+ const ref=headSha||"main";
+ const r=await fetch(RAW+ref+"/"+path,{cache:headSha?"force-cache":"no-store"});
  if(r.status===404)return {missing:true};
  if(!r.ok)throw new Error("HTTP "+r.status);
- return {data:await r.json()}}
+ const txt=await r.text();return {data:JSON.parse(txt),txt}}
 
-async function load(){
+async function load(force){
  if(loading)return;loading=true;$("#retry").classList.add("spin");
  try{
+  await checkHead(force);
   const ro=await getJSON("bots.json");
   if(!ro.data||!Array.isArray(ro.data.bots))throw new Error("bad roster");
   const roster=ro.data.bots.filter(r=>r&&r.slug&&/^[a-z0-9-]+$/.test(r.slug));
   let fails=0,tried=0;
+  const txt={"bots.json":ro.txt};
   const all=await Promise.all(roster.map(async r=>{
    if(r.state==="planned")return normalize(r);
    tried++;
-   try{const x=await getJSON("status/"+r.slug+".json");return normalize(r,x.data,x.missing?"404":null)}
-   catch(e){fails++;return normalize(r,null,"err")}}));
+   try{const x=await getJSON("status/"+r.slug+".json");
+    let st=x.data,t=x.txt||"404";
+    /* never step back to an older status (branch CDN copy can lag a pinned read) */
+    const prev=BY[r.slug];if(st&&prev&&prev.u&&Date.parse(st.updated_at)<prev.u&&RAWTXT[r.slug]){t=RAWTXT[r.slug];st=JSON.parse(t==="404"?"null":t)}
+    txt[r.slug]=t;return normalize(r,st,x.missing&&!st?"404":null)}
+   catch(e){fails++;txt[r.slug]=RAWTXT[r.slug];return BY[r.slug]&&MODE==="live"?BY[r.slug]:normalize(r,null,"err")}}));
   if(tried&&fails===tried)throw new Error("status unreachable");
-  apply(all,"live");
- }catch(e){if(MODE!=="live")apply(sample(),"sample");else{MODE="live-err"}}
+  const changed=MODE!=="live"||Object.keys(txt).length!==Object.keys(RAWTXT).length||Object.keys(txt).some(k=>txt[k]!==RAWTXT[k]);
+  RAWTXT=txt;
+  if(changed)apply(all,"live");else{MODE="live";lastSync=Date.now()}
+ }catch(e){if(MODE!=="live"&&MODE!=="live-err")apply(sample(),"sample");else{MODE="live-err"}}
  finally{loading=false;$("#retry").classList.remove("spin");header()}
- loadBrief();
+ if(force||Date.now()-lastBrief>HEAD_MS){lastBrief=Date.now();loadBrief()}
 }
 function sample(){return SAMPLE.map(([slug,n,d,s,t,m])=>({slug,n,d,r:d==="Chief of staff"?ROLE["grok-bot"]:"Placeholder bot",o:"Owner",s,t,u:m==null?null:Date.now()-m*60000,out:null,miss:t==="No status yet",off:false,chief:slug==="grok-bot"}))}
 function apply(list,mode){
@@ -362,7 +384,7 @@ async function loadBrief(){
 
 function header(){
  const s=$("#src");
- if(MODE==="live"||MODE==="live-err"){s.className="live";s.innerHTML=`<i></i>Live from GitHub<span>· updated ${newest?longAgo(newest):"—"}</span>`;
+ if(MODE==="live"||MODE==="live-err"){s.className="live";s.innerHTML=`<i></i>Live from GitHub<span>· updated ${newest?longAgo(newest):"—"} · refreshes every 5 s</span>`;
   s.title=(MODE==="live-err"?"Last refresh failed. ":"")+"Checked "+longAgo(lastSync)+". Click to refresh.";$("#notice").classList.add("none")}
  else if(MODE==="sample"){s.className="mock";s.textContent="Sample data";s.title="GitHub unreachable";$("#notice").classList.remove("none")}
  else{s.className="live load";s.innerHTML="<i></i>Connecting…"}}
@@ -421,10 +443,13 @@ $("#lanes").addEventListener("click",e=>{const h=e.target.closest("[data-lane]")
 $("#q").oninput=e=>{q=e.target.value.trim().toLowerCase();render()};
 $("#clear").onclick=()=>{fDept.clear();fOwn.clear();q="";$("#q").value="";render()};
 $("#tog").onclick=()=>{const ds=[...new Set(BOTS.map(b=>b.d))];if(ds.every(d=>closed.has(d)))closed.clear();else ds.forEach(d=>closed.add(d));render()};
-$("#retry").onclick=()=>load();
-$("#src").onclick=()=>load();
+$("#retry").onclick=()=>load(true);
+$("#src").onclick=()=>load(true);
 $(".logo span").innerHTML=ic("bot");
-load();
-setInterval(load,REFRESH_MS);
+load(true);
+/* poll every 5 s while the tab is visible; pause when hidden, refresh at once on return */
+setInterval(()=>{if(!document.hidden)load()},REFRESH_MS);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)load(true)});
+window.addEventListener("focus",()=>load(true));
 setInterval(()=>{if(BOTS.length&&!document.querySelector(".srch input:focus"))render()},30000);
 </script></body></html>
