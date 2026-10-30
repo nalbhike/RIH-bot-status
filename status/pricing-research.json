@@ -5,7 +5,7 @@
   "owner": "Hike",
   "status": "idle",
   "room": "kitchen",
-  "task": "Awaiting first assignment",
-  "updated_at": "2026-10-30T15:35:43+02:00",
-  "last_output": null
+  "task": "Awaiting next assignment",
+  "updated_at": "2026-10-30T21:30:06+02:00",
+  "last_output": "Market pricing research"
 }
