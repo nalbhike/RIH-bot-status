@@ -1,10 +1,12 @@
 {
-  "date": "2026-11-04",
-  "headline": "A quiet day: nothing new was filed since yesterday's digest.",
+  "date": "2026-11-05",
+  "headline": "Heavy filing day after a missed morning digest: org sync, leadership structure, finished builds, and several holds.",
   "items": [
-    "No new research, decisions, tasks or meeting notes have been filed.",
-    "25 bots remain registered: 11 active and 14 planned, no changes.",
-    "No new bots were registered.",
-    "Next step: assign work to the active bots and have them file their output."
+    "Company sync filed; leadership structure now CEO plus five C-level bots",
+    "Savings calculator build finished with its test suite passing",
+    "CRM spike finished",
+    "Research paused pending founder go-ahead",
+    "Some builds on hold pending approval",
+    "Morning digest run failed for lack of usage; regenerated later the same day"
   ]
 }
