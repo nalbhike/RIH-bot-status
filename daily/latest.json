@@ -1,10 +1,10 @@
 {
-  "date": "2026-11-07",
-  "headline": "Quiet day: no new filings while repo writes stay frozen; prepared work waits for publishing.",
+  "date": "2026-11-11",
+  "headline": "Publishing approved; knowledge-base filing is prepared and waits on repository access.",
   "items": [
     "No new commits to the knowledge base since the last published digest",
-    "Repo writes remain frozen; yesterday's and today's digests are staged locally",
-    "Hygiene fixes, research results and product drafts are prepared and waiting to be filed",
-    "Two bot registrations remain queued until repo access returns"
+    "Founders approved publishing the queued work; this status feed is being brought up to date",
+    "Knowledge-base filing is prepared and waits on repository access being granted",
+    "A retired bot role was dropped from the queue and a documentation role was added"
   ]
 }
