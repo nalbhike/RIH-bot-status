@@ -1,12 +1,11 @@
 {
-  "date": "2026-11-05",
-  "headline": "Heavy filing day after a missed morning digest: org sync, leadership structure, finished builds, and several holds.",
+  "date": "2026-11-06",
+  "headline": "Overnight freeze: afternoon filings on main, then hygiene, research, and product work staged locally only — not published.",
   "items": [
-    "Company sync filed; leadership structure now CEO plus five C-level bots",
-    "Savings calculator build finished with its test suite passing",
-    "CRM trial run finished",
-    "Research paused pending founder go-ahead",
-    "Some builds on hold pending approval",
-    "Morning digest run failed for lack of usage; regenerated later the same day"
+    "Repo writes frozen overnight; today's digest and new filings are staged locally only",
+    "Twenty-nine commits landed on main after yesterday's digest, then the tip stayed put",
+    "KB hygiene audit finished: registry counts match, no duplicate ids or broken links; five patches staged",
+    "Hebrew speech-to-text and OCR validation results staged (free local engines only)",
+    "Two bot registrations prepared and queued until repo access returns"
   ]
 }
