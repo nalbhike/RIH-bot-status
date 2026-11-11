@@ -1,11 +1,10 @@
 {
-  "date": "2026-11-06",
-  "headline": "Overnight freeze: afternoon filings on main, then hygiene, research, and product work staged locally only — not published.",
+  "date": "2026-11-07",
+  "headline": "Quiet day: no new filings while repo writes stay frozen; prepared work waits for publishing.",
   "items": [
-    "Repo writes frozen overnight; today's digest and new filings are staged locally only",
-    "Twenty-nine commits landed on main after yesterday's digest, then the tip stayed put",
-    "KB hygiene audit finished: registry counts match, no duplicate ids or broken links; five patches staged",
-    "Hebrew speech-to-text and OCR validation results staged (free local engines only)",
-    "Two bot registrations prepared and queued until repo access returns"
+    "No new commits to the knowledge base since the last published digest",
+    "Repo writes remain frozen; yesterday's and today's digests are staged locally",
+    "Hygiene fixes, research results and product drafts are prepared and waiting to be filed",
+    "Two bot registrations remain queued until repo access returns"
   ]
 }
