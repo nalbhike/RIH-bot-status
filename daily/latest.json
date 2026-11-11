@@ -1,12 +1,10 @@
 {
-  "date": "2026-11-05",
-  "headline": "Heavy filing day after a missed morning digest: org sync, leadership structure, finished builds, and several holds.",
+  "date": "2026-11-11",
+  "headline": "Publishing approved; knowledge-base filing is prepared and waits on repository access.",
   "items": [
-    "Company sync filed; leadership structure now CEO plus five C-level bots",
-    "Savings calculator build finished with its test suite passing",
-    "CRM trial run finished",
-    "Research paused pending founder go-ahead",
-    "Some builds on hold pending approval",
-    "Morning digest run failed for lack of usage; regenerated later the same day"
+    "No new commits to the knowledge base since the last published digest",
+    "Founders approved publishing the queued work; this status feed is being brought up to date",
+    "Knowledge-base filing is prepared and waits on repository access being granted",
+    "A retired bot role was dropped from the queue and a documentation role was added"
   ]
 }
