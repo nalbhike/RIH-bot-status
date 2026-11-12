@@ -1,10 +1,11 @@
 {
-  "date": "2026-11-11",
-  "headline": "Publishing approved; knowledge-base filing is prepared and waits on repository access.",
+  "date": "2026-11-12",
+  "headline": "As of 05:00: an internal CRM release was finished and accepted with follow-ups; the knowledge base was brought up to date.",
   "items": [
-    "No new commits to the knowledge base since the last published digest",
-    "Founders approved publishing the queued work; this status feed is being brought up to date",
-    "Knowledge-base filing is prepared and waits on repository access being granted",
-    "A retired bot role was dropped from the queue and a documentation role was added"
+    "Repository access was restored and queued knowledge-base filings were completed",
+    "The bot team was restructured and the bot registry updated",
+    "An internal CRM release was finished and accepted with follow-ups; it stays local-only and single-user until a security review",
+    "The internal CRM guide (English and Hebrew) and the decision log were updated",
+    "Daily executive status cutoffs started"
   ]
 }
