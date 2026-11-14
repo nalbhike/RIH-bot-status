@@ -1,11 +1,11 @@
 {
   "date": "2026-11-14",
-  "headline": "As of 05:00: the next internal CRM update has passed its security check and is waiting to be run today.",
+  "headline": "Updated 19:10: the internal CRM update ran overnight and passed its technical checks; a founder's hands-on test is next.",
   "items": [
-    "The next internal CRM update is approved, packaged, and cleared by the final security check.",
-    "The update must start today on the team's machine; a last script review is still pending.",
-    "Tech, Product and Data teams filed their daily status for Friday.",
-    "Late status reports from the previous day were added to the knowledge base.",
-    "Quality review of the update follows after it runs."
+    "The internal CRM update ran overnight and its technical run was accepted after security and quality reviews.",
+    "Saving new records is now switched on in the internal CRM, on the local machine only.",
+    "A founder's own hands-on test of the new Add screens is the last step before product acceptance.",
+    "Follow-up improvements found during the run are listed for the next update.",
+    "The Tech team filed its status for Saturday."
   ]
 }
