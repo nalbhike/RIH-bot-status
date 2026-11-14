@@ -1,11 +1,11 @@
 {
-  "date": "2026-11-12",
-  "headline": "As of 05:00: an internal CRM release was finished and accepted with follow-ups; the knowledge base was brought up to date.",
+  "date": "2026-11-14",
+  "headline": "As of 05:00: the next internal CRM update has passed its security check and is waiting to be run today.",
   "items": [
-    "Repository access was restored and queued knowledge-base filings were completed",
-    "The bot team was restructured and the bot registry updated",
-    "An internal CRM release was finished and accepted with follow-ups; it stays local-only and single-user until a security review",
-    "The internal CRM guide (English and Hebrew) and the decision log were updated",
-    "Daily executive status cutoffs started"
+    "The next internal CRM update is approved, packaged, and cleared by the final security check.",
+    "The update must start today on the team's machine; a last script review is still pending.",
+    "Tech, Product and Data teams filed their daily status for Friday.",
+    "Late status reports from the previous day were added to the knowledge base.",
+    "Quality review of the update follows after it runs."
   ]
 }
